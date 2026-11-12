@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numismatika dan Herealdika</title>
+    <style>
+        /* Paksa window iframe agar tidak memunculkan scrollbar internal */
+        html,
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+            overflow: hidden !important;
+            /* Mematikan scrollbar internal iframe */
+            background-color: transparent;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .gallery-container {
+            max-width: 100%;
+            margin: 0 auto;
+            text-align: center;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            overflow: visible !important;
+            /* Biarkan konten mengalir alami tanpa scroll tersendiri */
+        }
+
+        .slide-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .image-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            max-width: 356px;
+            border-radius: 8px;
+            object-fit: cover;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .btn-nav {
+            position: absolute;
+            background-color: rgba(211, 84, 0, 0.85);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+            z-index: 10;
+        }
+
+        .btn-nav:hover {
+            background-color: rgba(160, 64, 0, 1);
+        }
+
+        .prev {
+            left: 5px;
+        }
+
+        .next {
+            right: 5px;
+        }
+
+        .slide-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 15px;
+            line-height: 1.5;
+            text-align: justify;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="gallery-container">
+        <!-- Judul akan berubah otomatis -->
+        <div class="slide-title" id="judul-hewan">Memuat...</div>
+
+        <div class="image-wrapper">
+            <!-- Tombol Before / Prev -->
+            <button class="btn-nav prev" id="btn-prev" onclick="gantiSlide(-1)">&#10094;</button>
+
+            <!-- Gambar utama -->
+            <img id="gambar-hewan" src="" alt="Koleksi Museum">
+
+            <!-- Tombol Next -->
+            <button class="btn-nav next" id="btn-next" onclick="gantiSlide(1)">&#10095;</button>
+        </div>
+
+        <!-- Keterangan akan berubah otomatis -->
+        <div class="slide-desc" id="keterangan-hewan">Memuat keterangan...</div>
+    </div>
+
+    <script>
+        // 1. Tempat lu masukin Judul, Link Gambar, dan Keterangan
+        // Cukup edit teks di dalam tanda kutip ini aja ya
+        const koleksiData = [
+            {
+                judul: "Cap Kerajaan Pontianak",
+                gambar: "cap_kerajaan_pontianak.jpg",
+                keterangan: "Terbuat dari besi baja, bentuk empat persegi panjang. Bagian dasar atau cap terbuat dari besi yang bertuliskan huruf Latin timbul yang berbunyi “ Pangeran Laksamana Syarif Mauhammad Bin Haroen Alkadri”, di bawah tulisan ini ada motif bunga. Bagian atas atau pegangannya terbuat dari besi dan kayu bentuk setengah lingkaran berlekuk bermotif bunga. Bagian atas dan bawah dihubungkan dengan engsel dan diberi per berbentuk spiral. Cap ini digunakan untuk mengesahkan surat-surat yang dikeluarkan oleh Kerajaan Pontianak. Ukuran : P = 15,5 cm T = 7 cm L = 6 cm"
+            },
+            {
+                judul: "Cap Kerajaan Kubu, Silat dan Matan",
+                gambar: "cap_kerajaan_kuburaya_matan_silat.jpg",
+                keterangan: `Cap kerajaan kubu terbuat dari batu bentuk bulat, bertuliskan huruf Arab Melayu yang berbunyi “Syarif Abbas Ibn’oel Marchoem Syarif Hassan Al Aydroes Heer Van Koeboe”. Cap ini digunakan untuk mengesahkan surat-surat yang dikeluarkan oleh Kerajaan Kubu. Ukuran : P = 2,7 cm Dm = 4,5 cm.
+                
+                            Bagian dasar atau cap kerajaan silat terbuat dari karet, bentuk bulat bertuliskanhuruf Arab Melayu dan Romawi yang berbunyi “ Pangeran Ratoe Moeda Pakoe Negara Radja Van Silat”. Bagian atas atau pemegangnya terbuat dari kayu bentuk bulat panjang berlekuk. Cap ini digunakan untuk mengesahkan surat-surat yang dikeluarkan oleh Kerajaan Silat, Kapuas Hulu.
+                            
+                            Bagian dasar atau cap kerajaan matan terbuat dari kayu bentuk oval, sekeliling pinggirnya tertara tulisan “RADJA KERAJAAN MATAN KETAPANG BORNEO”, sedangkan pada bagian tengah di dalam lingkaran terdapat tulisan huruf Arab dan Jepang yaitu “RADJA KERAJAAN MATAN”. Bagian atas atau pemegangnya terbuat dari logam berbentuk bulat berlekuk. Digunakan pada masa pemerintahan Gusti Asra dari Kerajaan Negeri Kubah, Kecamatan Aur Kuning, Kabupaten Ketapang. Ukuran : P = 6 cm Dm = 5 cm`
+            },
+            {
+                judul: "Ducat, Mata Uang Logam Europa Hindia Indie, RI, Asia",
+                gambar: "ducat_mataUang_logam_hindi_RI_tandaPangkat_ponti.jpg",
+                keterangan: `Ducat teridir dari 2 buah, Mata uang logam europa hindia indie 24 buah, Mata uang RI 9 buah dan mata uang logam asia 11 buah`
+            },
+            {
+                judul: "Kupon Karet, Mata uang kertas Jerman dan Asia",
+                gambar: "mataUang_kertas_jerman_asia_dan_kupon_karet.jpg",
+                keterangan: `Kupon, bentuk empat persegi panjang, terbuat dari kertas yang bagian depan tertera tulisan RUBBER. Samping kiri atas bertuliskan RES.WESTERAFD VAN BORNEO RESTRICTIEJAR 1941. Oogtverguning boelan Januari, Februari dan Maret berlaku sampai dengan 30 April 1942. Kupon No. 1 ini bernomor seri C 00710. Kupon ini merupakan alat tukar bukti pembayaran penjualan karet seberat 32 kg karet kering berlaku dan digunakan di wilayah Kabupaten Sanggau. Ukuran : P = 21,3 cm L = 7,5 cm
+                            
+                            Kemuadian Mata uang Kertas Jerman terdiri dari 2 buah saja
+                            
+                            Lalu mata uang asia terdiri dari 1 buah mata uang malaysia, 1 buah mata uang singapura, 7 buah mata uang indonesia, 1 buah mata uang china dan 2 buah mata uang jepang. Totalnya ada 12 buah.`
+            }
+        ];
+
+        let indexSekarang = 0;
+
+        // Ambil elemen HTML yang akan dimanipulasi
+        const elemenJudul = document.getElementById('judul-hewan');
+        const elemenGambar = document.getElementById('gambar-hewan');
+        const elemenKeterangan = document.getElementById('keterangan-hewan');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+
+        function updateTampilan() {
+            // Ganti konten sesuai data array
+            elemenJudul.innerText = koleksiData[indexSekarang].judul;
+            elemenGambar.src = koleksiData[indexSekarang].gambar;
+            elemenKeterangan.innerText = koleksiData[indexSekarang].keterangan;
+
+            // Logika sesuai revisi dosen:
+            // Sembunyikan tombol Prev jika sedang di gambar urutan pertama (index 0)
+            if (indexSekarang === 0) {
+                btnPrev.style.display = 'none';
+            } else {
+                btnPrev.style.display = 'flex';
+            }
+
+            // Sembunyikan tombol Next jika sedang di gambar urutan terakhir
+            if (indexSekarang === koleksiData.length - 1) {
+                btnNext.style.display = 'none';
+            } else {
+                btnNext.style.display = 'flex';
+            }
+        }
+
+        function gantiSlide(arah) {
+            indexSekarang += arah;
+            updateTampilan();
+        }
+
+        // Jalankan fungsi saat web pertama kali dirender
+        updateTampilan();
+    </script>
+
+</body>
+
+</html>
